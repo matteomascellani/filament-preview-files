@@ -3,7 +3,6 @@
 Reusable Filament v3 actions and Blade views for:
 
 - media zoom preview (images and PDF)
-- ticket preview modal with comments and attachments
 
 ## Install
 
@@ -56,7 +55,6 @@ php artisan vendor:publish --tag=filament-preview-files-config
 
 ```php
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaZoomAction;
-use Matteomascellani\FilamentPreviewFiles\Actions\TicketPreviewAction;
 ```
 
 ```php
@@ -65,17 +63,7 @@ use Matteomascellani\FilamentPreviewFiles\Actions\TicketPreviewAction;
     urlResolver: fn ($record) => $record->getUrl(),
     mimeResolver: fn ($record) => (string) $record->mime_type,
   ),
-
-  TicketPreviewAction::make(
-    ticketResolver: fn ($record) => $record->ticket,
-  ),
 ])
-```
-
-If your table record is already the ticket model:
-
-```php
-TicketPreviewAction::forTicket()
 ```
 
 ### 2) Use in a normal Blade view
@@ -89,14 +77,6 @@ Media zoom modal content:
   'url' => $url,
   'mimeType' => $mimeType,
   'label' => $label,
-])
-```
-
-Ticket preview modal content:
-
-```blade
-@include('filament-preview-files::modals.ticket-preview', [
-  'ticket' => $ticket,
 ])
 ```
 
@@ -114,8 +94,6 @@ Helper component-like partial for link + zoom trigger:
 
 - `app/Filament/Resources/System/MediaResource.php`
 - `MediaZoomAction::make(...)` in table actions
-- `TicketPreviewAction::make(...)` in table actions
-- `TicketPreviewAction::loadWithRelations(...)` helper use
 
 ## Branching And Versioning
 

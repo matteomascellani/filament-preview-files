@@ -3,7 +3,6 @@
     "description": "Reusable Filament actions and views for file and ticket previews",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.2",
