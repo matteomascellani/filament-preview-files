@@ -30,7 +30,10 @@ Add to root `composer.json`:
   "repositories": [
     {
       "type": "path",
-      "url": "packages/matteomascellani/filament-preview-files"
+      "url": "../filament-preview-files",
+      "options": {
+        "symlink": true
+      }
     }
   ]
 }
@@ -139,31 +142,47 @@ Extra options for the link component:
 
 ### 3) Render a full media collection (TicketResource-style)
 
-Use the package helper to keep resources clean and avoid repeating map/render logic:
+Use the helper field to keep your resource schema clean:
 
 ```php
-use Matteomascellani\FilamentPreviewFiles\Support\MediaPreview;
+use Matteomascellani\FilamentPreviewFiles\Support\MediaCollectionPreviewField;
 ```
 
 ```php
-Placeholder::make('ticket_attachments_preview')
-    ->label('Allegati al ticket')
-    ->columnSpanFull()
-    ->visible(fn (?Ticket $record) => MediaPreview::hasMedia($record, 'attachments'))
-    ->content(fn (?Ticket $record) => MediaPreview::renderCollection(
-        record: $record,
-        collection: 'attachments',
-        showLabelLink: false,
-        showLabelText: true,
-    ));
+MediaCollectionPreviewField::make('ticket_attachments_preview', 'attachments', 'Allegati al ticket')
 ```
+
+### 4) Reuse media rows in custom views (comments, widgets, custom panels)
+
+If you already have a media collection and want the same UI as tickets, use the new table partial:
+
+```blade
+@include('filament-preview-files::components.media-items-table', [
+  'mediaItems' => $comment->media,
+])
+```
+
+For one-by-one rendering (inside your own loop), use:
+
+```blade
+@include('filament-preview-files::components.media-item-row', [
+  'media' => $media,
+])
+```
+
+Important:
+
+- prefer package views (`filament-preview-files::...`) over legacy local includes
+- avoid duplicating file label + preview/open button markup in consumers
 
 ## Current Usage In This Project
 
 - `app/Filament/Resources/System/MediaResource.php`
 - `...MediaPreviewAction::make(...)` in table actions
 - `app/Filament/Resources/Support/TicketResource.php`
-- `MediaPreview::hasMedia(...)` + `MediaPreview::renderCollection(...)`
+- `MediaCollectionPreviewField::make(...)`
+- `packages/parallax/filament-comments/resources/views/partials/_comment-item.blade.php`
+- `@include('filament-preview-files::components.media-items-table', ['mediaItems' => $comment->media])`
 
 ## Branching And Versioning
 
