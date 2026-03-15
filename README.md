@@ -1,9 +1,17 @@
 # filament-preview-files
 
-Reusable Filament v3 actions and Blade views for:
+Reusable Filament v4 actions and Blade views for:
 
 - media zoom preview (images and PDF)
-- ticket preview modal with comments and attachments
+- media open in new tab
+- graceful fallback when URL is missing (red unavailable icon)
+
+## Requirements
+
+- Filament `^4.0`
+- Spatie Media Library `^11.0`
+- Laravel `^11.28|^12.0`
+- PHP `^8.2`
 
 ## Install
 
@@ -55,9 +63,26 @@ php artisan vendor:publish --tag=filament-preview-files-config
 ### 1) Use in a Filament table (Actions)
 
 ```php
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaPreviewAction;
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaOpenAction;
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaZoomAction;
-use Matteomascellani\FilamentPreviewFiles\Actions\TicketPreviewAction;
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaUnavailableAction;
 ```
+
+```php
+->actions([
+  // Wrapper that injects all table actions:
+  // - zoom (only for image/pdf with valid URL)
+  // - open in new tab (only with valid URL)
+  // - unavailable fallback (red no-symbol when URL is missing)
+  ...MediaPreviewAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
+    mimeResolver: fn ($record) => (string) $record->mime_type,
+  ),
+])
+```
+
+If you prefer separate actions, all single actions are still available:
 
 ```php
 ->actions([
@@ -66,16 +91,14 @@ use Matteomascellani\FilamentPreviewFiles\Actions\TicketPreviewAction;
     mimeResolver: fn ($record) => (string) $record->mime_type,
   ),
 
-  TicketPreviewAction::make(
-    ticketResolver: fn ($record) => $record->ticket,
+  MediaOpenAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
+  ),
+
+  MediaUnavailableAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
   ),
 ])
-```
-
-If your table record is already the ticket model:
-
-```php
-TicketPreviewAction::forTicket()
 ```
 
 ### 2) Use in a normal Blade view
@@ -92,14 +115,6 @@ Media zoom modal content:
 ])
 ```
 
-Ticket preview modal content:
-
-```blade
-@include('filament-preview-files::modals.ticket-preview', [
-  'ticket' => $ticket,
-])
-```
-
 Helper component-like partial for link + zoom trigger:
 
 ```blade
@@ -113,14 +128,12 @@ Helper component-like partial for link + zoom trigger:
 ## Current Usage In This Project
 
 - `app/Filament/Resources/System/MediaResource.php`
-- `MediaZoomAction::make(...)` in table actions
-- `TicketPreviewAction::make(...)` in table actions
-- `TicketPreviewAction::loadWithRelations(...)` helper use
+- `...MediaPreviewAction::make(...)` in table actions
 
 ## Branching And Versioning
 
 - `1.x`: Filament 3 compatible line (Laravel 11)
-- `2.x`: Filament 4 compatible line (future/current upgrades)
+- `2.x`: Filament 4 compatible line
 
 Suggested release policy:
 
