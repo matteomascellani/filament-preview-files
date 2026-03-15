@@ -116,3 +116,13 @@ Helper component-like partial for link + zoom trigger:
 - `MediaZoomAction::make(...)` in table actions
 - `TicketPreviewAction::make(...)` in table actions
 - `TicketPreviewAction::loadWithRelations(...)` helper use
+
+## Branching And Versioning
+
+- `1.x`: Filament 3 compatible line (Laravel 11)
+- `2.x`: Filament 4 compatible line (future/current upgrades)
+
+Suggested release policy:
+
+- publish `v1.*` tags from `1.x`
+- publish `v2.*` tags from `2.x`
