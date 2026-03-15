@@ -22,26 +22,31 @@
         @elseif ($items->isEmpty())
             <p class="text-xs text-gray-500 dark:text-gray-400">No attachments found.</p>
         @else
-            <div class="space-y-2">
-                @foreach ($items as $media)
-                    @php
-                        $fileName = (string) ($media->name ?: $media->file_name);
-                    @endphp
+            <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-white/10">
+                <table class="w-full text-sm">
+                    <tbody class="divide-y divide-gray-200 dark:divide-white/10">
+                        @foreach ($items as $media)
+                            @php
+                                $fileName = (string) ($media->name ?: $media->file_name);
+                            @endphp
 
-                    <div class="flex items-center justify-between gap-3">
-                        <span class="min-w-0 truncate text-sm text-gray-800 dark:text-gray-100" title="{{ $fileName }}">
-                            {{ $fileName }}
-                        </span>
-
-                        @include('filament-preview-files::components.media-zoom-link', [
-                            'url' => $media->getUrl(),
-                            'mimeType' => (string) ($media->mime_type ?? ''),
-                            'label' => $fileName,
-                            'showLabelText' => false,
-                            'showLabelLink' => false,
-                        ])
-                    </div>
-                @endforeach
+                            <tr class="align-middle">
+                                <td class="px-3 py-2 text-gray-800 dark:text-gray-100">
+                                    <span class="block truncate" title="{{ $fileName }}">{{ $fileName }}</span>
+                                </td>
+                                <td class="px-3 py-2 w-1 whitespace-nowrap">
+                                    @include('filament-preview-files::components.media-zoom-link', [
+                                        'url' => $media->getUrl(),
+                                        'mimeType' => (string) ($media->mime_type ?? ''),
+                                        'label' => $fileName,
+                                        'showLabelText' => false,
+                                        'showLabelLink' => false,
+                                    ])
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         @endif
     </div>
@@ -79,11 +84,13 @@
                         <x-filament::button
                             type="button"
                             size="sm"
-                            color="success"
-                            class="!px-2 !py-1 !text-xs"
+                            color="primary"
+                            class="!px-2 !py-1 !text-xs !inline-flex !items-center !gap-1 !whitespace-nowrap"
                         >
-                            <x-filament::icon icon="heroicon-o-magnifying-glass-plus" class="w-3.5 h-3.5" />
-                            Preview
+                            <span class="inline-flex items-center gap-1 whitespace-nowrap">
+                                <x-filament::icon icon="heroicon-o-magnifying-glass-plus" class="w-3.5 h-3.5 shrink-0" />
+                                <span>Preview</span>
+                            </span>
                         </x-filament::button>
                     @else
                         <button
@@ -117,11 +124,13 @@
                     href="{{ $url }}"
                     target="_blank"
                     size="sm"
-                    color="success"
-                    class="!px-2 !py-1 !text-xs"
+                    color="primary"
+                    class="!px-2 !py-1 !text-xs !inline-flex !items-center !gap-1 !whitespace-nowrap"
                 >
-                    <x-filament::icon icon="heroicon-o-arrow-top-right-on-square" class="w-3.5 h-3.5" />
-                    Open
+                    <span class="inline-flex items-center gap-1 whitespace-nowrap">
+                        <x-filament::icon icon="heroicon-o-arrow-top-right-on-square" class="w-3.5 h-3.5 shrink-0" />
+                        <span>Open</span>
+                    </span>
                 </x-filament::button>
             @else
                 <a
