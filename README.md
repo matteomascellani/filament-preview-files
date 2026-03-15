@@ -3,6 +3,8 @@
 Reusable Filament v3 actions and Blade views for:
 
 - media zoom preview (images and PDF)
+- media open in new tab
+- graceful fallback when URL is missing (red unavailable icon)
 
 ## Install
 
@@ -57,19 +59,23 @@ php artisan vendor:publish --tag=filament-preview-files-config
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaPreviewAction;
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaOpenAction;
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaZoomAction;
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaUnavailableAction;
 ```
 
 ```php
 ->actions([
-  // Single combined action (preview + open link in modal)
-  MediaPreviewAction::make(
+  // Wrapper that injects all table actions:
+  // - zoom (only for image/pdf with valid URL)
+  // - open in new tab (only with valid URL)
+  // - unavailable fallback (red no-symbol when URL is missing)
+  ...MediaPreviewAction::make(
     urlResolver: fn ($record) => $record->getUrl(),
     mimeResolver: fn ($record) => (string) $record->mime_type,
   ),
 ])
 ```
 
-If you prefer separate actions, both are still available:
+If you prefer separate actions, all single actions are still available:
 
 ```php
 ->actions([
@@ -79,6 +85,10 @@ If you prefer separate actions, both are still available:
   ),
 
   MediaOpenAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
+  ),
+
+  MediaUnavailableAction::make(
     urlResolver: fn ($record) => $record->getUrl(),
   ),
 ])
@@ -108,10 +118,45 @@ Helper component-like partial for link + zoom trigger:
 ])
 ```
 
+Extra options for the link component:
+
+```blade
+@include('filament-preview-files::components.media-zoom-link', [
+  'url' => $url,
+  'mimeType' => $mimeType,
+  'label' => $label,
+  'showLabelLink' => false,
+  'showLabelText' => true,
+])
+```
+
+### 3) Render a full media collection (TicketResource-style)
+
+Use the package helper to keep resources clean and avoid repeating map/render logic:
+
+```php
+use Matteomascellani\FilamentPreviewFiles\Support\MediaPreview;
+```
+
+```php
+Placeholder::make('ticket_attachments_preview')
+    ->label('Allegati al ticket')
+    ->columnSpanFull()
+    ->visible(fn (?Ticket $record) => MediaPreview::hasMedia($record, 'attachments'))
+    ->content(fn (?Ticket $record) => MediaPreview::renderCollection(
+        record: $record,
+        collection: 'attachments',
+        showLabelLink: false,
+        showLabelText: true,
+    ));
+```
+
 ## Current Usage In This Project
 
 - `app/Filament/Resources/System/MediaResource.php`
-- `MediaPreviewAction::make(...)` in table actions
+- `...MediaPreviewAction::make(...)` in table actions
+- `app/Filament/Resources/Support/TicketResource.php`
+- `MediaPreview::hasMedia(...)` + `MediaPreview::renderCollection(...)`
 
 ## Branching And Versioning
 

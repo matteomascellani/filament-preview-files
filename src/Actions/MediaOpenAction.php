@@ -18,7 +18,7 @@ class MediaOpenAction
         return Action::make($name)
             ->label('Apri file')
             ->icon('heroicon-o-arrow-top-right-on-square')
-            ->iconButton()
+            ->visible(fn ($record) => filled($getUrl($record)))
             ->url(fn ($record) => $getUrl($record), shouldOpenInNewTab: true);
     }
 }
