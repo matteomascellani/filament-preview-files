@@ -80,9 +80,9 @@
                             type="button"
                             size="sm"
                             color="success"
-                            icon="heroicon-o-magnifying-glass-plus"
                             class="!px-2 !py-1 !text-xs"
                         >
+                            <x-filament::icon icon="heroicon-o-magnifying-glass-plus" class="w-3.5 h-3.5" />
                             Preview
                         </x-filament::button>
                     @else
@@ -118,9 +118,9 @@
                     target="_blank"
                     size="sm"
                     color="success"
-                    icon="heroicon-o-arrow-top-right-on-square"
                     class="!px-2 !py-1 !text-xs"
                 >
+                    <x-filament::icon icon="heroicon-o-arrow-top-right-on-square" class="w-3.5 h-3.5" />
                     Open
                 </x-filament::button>
             @else
