@@ -1,0 +1,26 @@
+{
+    "name": "matteomascellani/filament-preview-files",
+    "description": "Reusable Filament actions and views for file and ticket previews",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^3.2",
+        "illuminate/support": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matteomascellani\\FilamentPreviewFiles\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Matteomascellani\\FilamentPreviewFiles\\FilamentPreviewFilesServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
