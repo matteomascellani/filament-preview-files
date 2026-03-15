@@ -40,8 +40,11 @@ class MediaZoomAction
             ->modalSubmitAction(false)
             ->modalCancelAction(false)
             ->visible(fn ($record) =>
-                Str::startsWith((string) $getMime($record), 'image/')
-                || (string) $getMime($record) === 'application/pdf'
+                filled($getUrl($record))
+                && (
+                    Str::startsWith((string) $getMime($record), 'image/')
+                    || (string) $getMime($record) === 'application/pdf'
+                )
             );
     }
 }

@@ -1,14 +1,27 @@
 @php
+    $hasUrl = filled($url ?? null);
     $isImage = str_starts_with((string) $mimeType, 'image/');
     $isPdf = $mimeType === 'application/pdf';
-    $canZoom = $isImage || $isPdf;
+    $canZoom = $hasUrl && ($isImage || $isPdf);
     $linkClass = $linkClass ?? 'text-xs font-medium text-primary-600 hover:text-primary-800 dark:text-primary-400 underline';
+    $showLabelLink = (bool) ($showLabelLink ?? true);
+    $showLabelText = (bool) ($showLabelText ?? true);
 @endphp
 
 <div class="flex items-center gap-1">
-    <a href="{{ $url }}" target="_blank" class="{{ $linkClass }}">
-        {{ $label }}
-    </a>
+    @if ($showLabelText)
+        @if ($showLabelLink)
+            @if ($hasUrl)
+                <a href="{{ $url }}" target="_blank" class="{{ $linkClass }}">
+                    {{ $label }}
+                </a>
+            @else
+                <span class="text-xs text-gray-700 dark:text-gray-300">{{ $label }}</span>
+            @endif
+        @else
+            <span class="text-xs text-gray-700 dark:text-gray-300">{{ $label }}</span>
+        @endif
+    @endif
 
     @if ($canZoom)
         <x-filament::modal width="7xl" close-button>
@@ -34,7 +47,9 @@
                 'label' => $label,
             ])
         </x-filament::modal>
-    @else
+    @endif
+
+    @if ($hasUrl)
         <a
             href="{{ $url }}"
             target="_blank"
@@ -45,5 +60,14 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-7.5 3L21 3m0 0h-5.25M21 3v5.25" />
             </svg>
         </a>
+    @else
+        <span
+            class="inline-flex items-center justify-center w-4 h-4 rounded bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-300"
+            title="Anteprima non disponibile"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m18.364 5.636-12.728 12.728m0-12.728 12.728 12.728" />
+            </svg>
+        </span>
     @endif
 </div>
