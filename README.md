@@ -6,6 +6,13 @@ Reusable Filament v3 actions and Blade views for:
 - media open in new tab
 - graceful fallback when URL is missing (red unavailable icon)
 
+## Requirements
+
+- Filament `^3.2`
+- Spatie Media Library `^11.0`
+- Laravel `^11`
+- PHP `^8.2`
+
 ## Install
 
 ### From Packagist (recommended)
@@ -161,7 +168,7 @@ Placeholder::make('ticket_attachments_preview')
 ## Branching And Versioning
 
 - `1.x`: Filament 3 compatible line (Laravel 11)
-- `2.x`: Filament 4 compatible line (future/current upgrades)
+- `2.x`: Filament 4 compatible line
 
 Suggested release policy:
 
