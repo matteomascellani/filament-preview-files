@@ -8,7 +8,7 @@ class MediaPreviewAction
      * Build both reusable actions (zoom modal + open in new tab) in one call.
      *
      * Usage:
-     *   ->actions([
+    *   ->recordActions([
      *       ...MediaPreviewAction::make(
      *           urlResolver: fn ($record) => $record->getUrl(),
      *           mimeResolver: fn ($record) => (string) $record->mime_type,

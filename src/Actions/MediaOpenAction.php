@@ -2,7 +2,7 @@
 
 namespace Matteomascellani\FilamentPreviewFiles\Actions;
 
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 
 class MediaOpenAction
 {
@@ -19,6 +19,7 @@ class MediaOpenAction
             ->label('Apri file')
             ->icon('heroicon-o-arrow-top-right-on-square')
             ->visible(fn ($record) => filled($getUrl($record)))
-            ->url(fn ($record) => $getUrl($record), shouldOpenInNewTab: true);
+            ->url(fn ($record) => $getUrl($record))
+            ->openUrlInNewTab();
     }
 }

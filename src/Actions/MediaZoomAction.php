@@ -2,7 +2,7 @@
 
 namespace Matteomascellani\FilamentPreviewFiles\Actions;
 
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 use Illuminate\Support\Str;
 
 class MediaZoomAction

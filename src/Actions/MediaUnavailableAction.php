@@ -2,7 +2,7 @@
 
 namespace Matteomascellani\FilamentPreviewFiles\Actions;
 
-use Filament\Tables\Actions\Action;
+use Filament\Actions\Action;
 
 class MediaUnavailableAction
 {

@@ -70,7 +70,7 @@ use Matteomascellani\FilamentPreviewFiles\Actions\MediaUnavailableAction;
 ```
 
 ```php
-->actions([
+->recordActions([
   // Wrapper that injects all table actions:
   // - zoom (only for image/pdf with valid URL)
   // - open in new tab (only with valid URL)
@@ -85,7 +85,7 @@ use Matteomascellani\FilamentPreviewFiles\Actions\MediaUnavailableAction;
 If you prefer separate actions, all single actions are still available:
 
 ```php
-->actions([
+->recordActions([
   MediaZoomAction::make(
     urlResolver: fn ($record) => $record->getUrl(),
     mimeResolver: fn ($record) => (string) $record->mime_type,
