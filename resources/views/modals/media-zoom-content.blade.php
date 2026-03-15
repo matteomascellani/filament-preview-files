@@ -1,6 +1,8 @@
 @php
     $isImage = str_starts_with((string) $mimeType, 'image/');
     $showOpenLink = (bool) ($showOpenLink ?? false);
+    $previewHeight = '75vh';
+    $previewMaxHeight = '900px';
 @endphp
 
 <div class="flex min-h-0 flex-col">
@@ -20,10 +22,10 @@
     <div class="px-2 py-2 sm:px-4 sm:py-3" style="overflow: hidden;">
         <div
             class="w-full overflow-hidden rounded-lg border border-gray-200/70 dark:border-white/10"
-            style="height: min(75vh, 900px); max-height: min(75vh, 900px);"
+            style="height: {{ $previewHeight }}; max-height: {{ $previewMaxHeight }};"
         >
         @if ($isImage)
-            <div class="flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-950/40">
+            <div class="flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-950/40" style="height: {{ $previewHeight }}; max-height: {{ $previewMaxHeight }};">
                 <img
                     src="{{ $url }}"
                     alt="{{ $label ?? 'Media preview' }}"
@@ -36,7 +38,7 @@
                 src="{{ $url }}"
                 title="{{ $label ?? 'Media preview' }}"
                 class="block h-full w-full border-0 bg-white"
-                style="display:block;width:100%;height:100%;"
+                style="display:block;width:100%;height:{{ $previewHeight }};max-height:{{ $previewMaxHeight }};"
             ></iframe>
         @endif
         </div>
