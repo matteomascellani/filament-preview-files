@@ -3,8 +3,10 @@
     $record = $record ?? null;
     $collection = (string) ($collection ?? '');
     $heading = (string) ($heading ?? ucfirst($collection));
+    $url = $url ?? null;
 
-    $isCollectionMode = $record && $collection !== '' && method_exists($record, 'getMedia');
+    // Prevent recursive includes: when URL is present we must render single-file mode.
+    $isCollectionMode = blank($url) && $record && $collection !== '' && method_exists($record, 'getMedia');
 @endphp
 
 @if ($isCollectionMode)
