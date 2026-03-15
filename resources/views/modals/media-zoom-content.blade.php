@@ -1,6 +1,20 @@
 @php
     $isImage = str_starts_with((string) $mimeType, 'image/');
+    $showOpenLink = (bool) ($showOpenLink ?? false);
 @endphp
+
+@if ($showOpenLink)
+    <div class="px-2 pt-2 sm:px-4">
+        <a
+            href="{{ $url }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:underline dark:text-primary-400"
+        >
+            Apri file
+        </a>
+    </div>
+@endif
 
 @if ($isImage)
     <div class="px-2 py-3 sm:px-4 sm:py-4 overflow-auto">

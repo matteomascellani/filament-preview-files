@@ -54,14 +54,32 @@ php artisan vendor:publish --tag=filament-preview-files-config
 ### 1) Use in a Filament table (Actions)
 
 ```php
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaPreviewAction;
+use Matteomascellani\FilamentPreviewFiles\Actions\MediaOpenAction;
 use Matteomascellani\FilamentPreviewFiles\Actions\MediaZoomAction;
 ```
+
+```php
+->actions([
+  // Single combined action (preview + open link in modal)
+  MediaPreviewAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
+    mimeResolver: fn ($record) => (string) $record->mime_type,
+  ),
+])
+```
+
+If you prefer separate actions, both are still available:
 
 ```php
 ->actions([
   MediaZoomAction::make(
     urlResolver: fn ($record) => $record->getUrl(),
     mimeResolver: fn ($record) => (string) $record->mime_type,
+  ),
+
+  MediaOpenAction::make(
+    urlResolver: fn ($record) => $record->getUrl(),
   ),
 ])
 ```
@@ -93,7 +111,7 @@ Helper component-like partial for link + zoom trigger:
 ## Current Usage In This Project
 
 - `app/Filament/Resources/System/MediaResource.php`
-- `MediaZoomAction::make(...)` in table actions
+- `MediaPreviewAction::make(...)` in table actions
 
 ## Branching And Versioning
 
