@@ -22,32 +22,9 @@
         @elseif ($items->isEmpty())
             <p class="text-xs text-gray-500 dark:text-gray-400">No attachments found.</p>
         @else
-            <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-white/10">
-                <table class="w-full text-sm">
-                    <tbody class="divide-y divide-gray-200 dark:divide-white/10">
-                        @foreach ($items as $media)
-                            @php
-                                $fileName = (string) ($media->name ?: $media->file_name);
-                            @endphp
-
-                            <tr class="align-middle">
-                                <td class="px-3 py-2 text-gray-800 dark:text-gray-100">
-                                    <span class="block truncate" title="{{ $fileName }}">{{ $fileName }}</span>
-                                </td>
-                                <td class="px-3 py-2 w-1 whitespace-nowrap">
-                                    @include('filament-preview-files::components.media-zoom-link', [
-                                        'url' => $media->getUrl(),
-                                        'mimeType' => (string) ($media->mime_type ?? ''),
-                                        'label' => $fileName,
-                                        'showLabelText' => false,
-                                        'showLabelLink' => false,
-                                    ])
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @include('filament-preview-files::components.media-items-table', [
+                'mediaItems' => $items,
+            ])
         @endif
     </div>
 @else
