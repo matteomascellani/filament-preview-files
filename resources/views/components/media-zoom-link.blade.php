@@ -1,9 +1,15 @@
 @php
     /** @var \Illuminate\Database\Eloquent\Model|null $record */
+    $toSafeString = static function (mixed $value, string $default = ''): string {
+        return is_string($value) || is_numeric($value) ? (string) $value : $default;
+    };
+
     $record = $record ?? null;
-    $collection = (string) ($collection ?? '');
-    $heading = (string) ($heading ?? ucfirst($collection));
+    $collection = $toSafeString($collection ?? '', '');
+    $heading = $toSafeString($heading ?? null, ucfirst($collection));
     $url = $url ?? null;
+    $mimeType = $toSafeString($mimeType ?? '', '');
+    $label = $toSafeString($label ?? 'File', 'File');
 
     // Prevent recursive includes: when URL is present we must render single-file mode.
     $isCollectionMode = blank($url) && $record && $collection !== '' && method_exists($record, 'getMedia');
