@@ -1,5 +1,6 @@
 @php
     $isImage = str_starts_with((string) $mimeType, 'image/');
+    $isPdf   = $mimeType === 'application/pdf';
     $showOpenLink = (bool) ($showOpenLink ?? false);
     $previewHeight = '75vh';
     $previewMaxHeight = '900px';
@@ -33,6 +34,21 @@
                     style="display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;"
                 >
             </div>
+        @elseif ($isPdf)
+            {{-- <object> bypassa le preferenze Firefox «Salva PDF» e usa direttamente PDF.js --}}
+            <object
+                data="{{ $url }}"
+                type="application/pdf"
+                class="block h-full w-full border-0 bg-white"
+                style="display:block;width:100%;height:{{ $previewHeight }};max-height:{{ $previewMaxHeight }};"
+            >
+                <iframe
+                    src="{{ $url }}"
+                    title="{{ $label ?? 'Media preview' }}"
+                    class="block h-full w-full border-0 bg-white"
+                    style="display:block;width:100%;height:{{ $previewHeight }};max-height:{{ $previewMaxHeight }};"
+                ></iframe>
+            </object>
         @else
             <iframe
                 src="{{ $url }}"
