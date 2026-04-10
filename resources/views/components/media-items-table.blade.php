@@ -1,5 +1,6 @@
 @php
     $mediaItems = $mediaItems ?? collect();
+    $urlResolver = $urlResolver ?? null;
 
     if (! $mediaItems instanceof \Illuminate\Support\Collection) {
         $mediaItems = collect($mediaItems);
@@ -12,7 +13,8 @@
             <tbody class="divide-y divide-gray-200 dark:divide-white/10">
                 @foreach ($mediaItems as $media)
                     @include('filament-preview-files::components.media-item-row', [
-                        'media' => $media,
+                        'media'       => $media,
+                        'urlResolver' => $urlResolver,
                     ])
                 @endforeach
             </tbody>

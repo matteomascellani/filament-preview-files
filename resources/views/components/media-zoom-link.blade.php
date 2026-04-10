@@ -10,6 +10,7 @@
     $url = $url ?? null;
     $mimeType = $toSafeString($mimeType ?? '', '');
     $label = $toSafeString($label ?? 'File', 'File');
+    $urlResolver = $urlResolver ?? null;
 
     // Prevent recursive includes: when URL is present we must render single-file mode.
     $isCollectionMode = blank($url) && $record && $collection !== '' && method_exists($record, 'getMedia');
@@ -29,7 +30,8 @@
             <p class="text-xs text-gray-500 dark:text-gray-400">No attachments found.</p>
         @else
             @include('filament-preview-files::components.media-items-table', [
-                'mediaItems' => $items,
+                'mediaItems'  => $items,
+                'urlResolver' => $urlResolver,
             ])
         @endif
     </div>
