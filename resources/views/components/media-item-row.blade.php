@@ -1,6 +1,7 @@
 @php
     /** @var mixed $media */
     $media = $media ?? null;
+    $urlResolver = $urlResolver ?? null; // callable|null — fn($media): string
 
     $name = (string) data_get($media, 'name', data_get($media, 'file_name', 'file'));
     $fileName = (string) data_get($media, 'file_name', '');
@@ -14,6 +15,11 @@
             $label .= $suffix;
         }
     }
+
+    // Allow caller to override the URL (e.g. via a proxy that serves with Content-Disposition: inline)
+    $resolvedUrl = $urlResolver
+        ? $urlResolver($media)
+        : (method_exists($media, 'getUrl') ? $media->getUrl() : null);
 @endphp
 
 <tr class="align-middle">
@@ -22,9 +28,9 @@
     </td>
     <td class="px-3 py-2 w-1 whitespace-nowrap">
         @include('filament-preview-files::components.media-zoom-link', [
-            'url' => method_exists($media, 'getUrl') ? $media->getUrl() : null,
-            'mimeType' => (string) data_get($media, 'mime_type', ''),
-            'label' => $label,
+            'url'          => $resolvedUrl,
+            'mimeType'     => (string) data_get($media, 'mime_type', ''),
+            'label'        => $label,
             'showLabelText' => false,
             'showLabelLink' => false,
         ])
